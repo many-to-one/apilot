@@ -1,0 +1,71 @@
+version: "3.9"
+
+services:
+  web:
+    build: .
+    container_name: fastapi_app
+    ports:
+
+      - "${UVICORN_PORT}:${UVICORN_PORT}"
+    volumes:
+      - ./app:/app
+    environment:
+      - REDIS_URL=${REDIS_URL}
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: uvicorn main:app --host ${UVICORN_HOST} --port ${UVICORN_PORT} --reload
+    # command: gunicorn main:app
+    #   --workers 1
+    #   --worker-class uvicorn.workers.UvicornWorker
+    #   --bind ${UVICORN_HOST}:${UVICORN_PORT}
+    #   --timeout 120
+
+  worker:
+    build: .
+    container_name: ecommerce_worker
+    restart: always
+    env_file: .env
+    command: celery -A app.workers.celery_app worker --loglevel=INFO
+    depends_on:
+      - web
+      - db
+      - redis
+
+  db:
+    image: postgres:17
+    container_name: ecommerce_db
+    restart: always
+    env_file: .env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      # -U to użytkownik, -d to nazwa bazy (pobierane ze zmiennych)
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  redis:
+    image: redis:7
+    container_name: ecommerce_redis
+    restart: always
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  postgres_data:

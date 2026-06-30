@@ -1,0 +1,39 @@
+# FastAPI
+fastapi==0.110.0
+uvicorn[standard]==0.29.0
+
+# Async HTTP
+httpx==0.27.0
+
+# Pydantic v2
+pydantic==2.6.1
+pydantic-settings==2.2.1
+
+# SQLAlchemy async + PostgreSQL
+SQLAlchemy==2.0.27
+asyncpg==0.29.0
+
+# Alembic
+alembic==1.13.1
+
+# Redis + Celery
+redis==5.0.1
+celery==5.3.6
+
+# Auth
+python-jose==3.3.0
+passlib[bcrypt]==1.7.4
+
+# Utils
+python-multipart==0.0.9
+loguru==0.7.2
+
+# Integracje marketplace
+allegro-api==0.1.0
+shopifyapi==12.0.0
+woocommerce==3.0.0
+# Amazon Marketplace SP-API (community)
+python-amazon-sp-api==0.4.0
+# eBay SDK
+ebaysdk==2.2.0
+inpost==0.1.5
