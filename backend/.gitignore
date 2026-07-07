@@ -20,6 +20,7 @@ env/
 # --- FastAPI / Uvicorn ---
 *.db
 *.sqlite3
+# app.alembic.ini
 
 # --- Jinja2 cache ---
 *.jinja2-cache

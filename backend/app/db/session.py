@@ -1,11 +1,11 @@
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
-from app.core.config import settings
+from core.config import settings
 
 # Tworzymy async engine
 engine = create_async_engine(
-    settings.DATABASE_URL,
+    settings.POSTGRES_URL,
     echo=False,           # ustaw na True jeśli chcesz logi SQL
     future=True
 )
