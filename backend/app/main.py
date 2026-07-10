@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from core.config import settings
 # from api.router import api_router
 from api.v1.auth import router as auth_router
+from api.v1.integrations.allegro import router as allegro_router
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -21,6 +22,7 @@ app.add_middleware(
 
 # Rejestracja routerów
 app.include_router(auth_router, prefix="/api/v1/auth", tags=["auth"])
+app.include_router(allegro_router, prefix="/api/v1/integrations/allegro", tags=["allegro"])
 
 
 @app.get("/health")
